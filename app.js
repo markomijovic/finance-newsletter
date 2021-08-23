@@ -2,11 +2,16 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const https = require("https");
-const { stat } = require("fs");
+require("dotenv").config();
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const subItem = new Map([
+    [1, { priceInUSD: 5, name: "MM Montly Financial Analysis" }],
+]);
 
 // send file when user opens web app
 app.get("/", (req, res) => {
