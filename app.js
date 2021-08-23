@@ -41,11 +41,11 @@ app.post("/", (req, res) => {
     // convert to json
     const jsonData = JSON.stringify(data);
     const server = "us5";
-    const audId = "e948d79fae";
+    const audId = "";
     const url = "https://" + server + ".api.mailchimp.com/3.0/lists/" + audId;
     const options = {
         method: "POST",
-        auth: "markom:39f35e5e39718bd10d3d731b0a170274-us5",
+        auth: "",
     };
     const request = https.request(url, options, (response) => {
         const status = response.statusCode;
