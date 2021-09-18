@@ -10,7 +10,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-const YOUR_DOMAIN = process.env.SERVER_URL;
+const YOUR_DOMAIN = window.location.origin;
 
 const storeItems = new Map([
     [1, { priceInCents: 500, name: "MM Monthly Financial Analysis" }],
