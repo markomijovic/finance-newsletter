@@ -1,21 +1,25 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const https = require("https");
-require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
-const subItem = new Map([
-    [1, { priceInUSD: 5, name: "MM Montly Financial Analysis" }],
+const YOUR_DOMAIN = process.env.SERVER_URL;
+
+const storeItems = new Map([
+    [1, { priceInCents: 500, name: "MM Monthly Financial Analysis" }],
+    [2, { priceInCents: 100, name: "MM Weekly Financial Analysis" }],
 ]);
 
 // send file when user opens web app
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "/signup.html"));
+    res.sendFile(path.join(__dirname, "public/signup.html"));
 });
 
 app.post("/", (req, res) => {
@@ -41,24 +45,46 @@ app.post("/", (req, res) => {
     // convert to json
     const jsonData = JSON.stringify(data);
     const server = "us5";
-    const audId = "";
+    const audId = "e948d79fae";
     const url = "https://" + server + ".api.mailchimp.com/3.0/lists/" + audId;
     const options = {
         method: "POST",
-        auth: "",
+        auth: "markom:39f35e5e39718bd10d3d731b0a170274-us5",
     };
     const request = https.request(url, options, (response) => {
         const status = response.statusCode;
         console.log(status);
         if (status === 200) {
-            res.sendFile(path.join(__dirname, "/success.html"));
+            res.sendFile(path.join(__dirname, "public/success.html"));
         } else {
-            res.sendFile(path.join(__dirname, "/failure.html"));
+            res.sendFile(path.join(__dirname, "public/failure.html"));
         }
     });
 
     request.write(jsonData);
     request.end();
+});
+
+app.post("/create-checkout-session", async (req, res) => {
+    const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        mode: "payment",
+        line_items: [
+            {
+                price_data: {
+                    currency: "usd",
+                    product_data: {
+                        name: "MM Finance NewsLetter Test Product",
+                    },
+                    unit_amount: 1000,
+                },
+                quantity: 1,
+            },
+        ],
+        success_url: `${process.env.SERVER_URL}/sucess.html`,
+        cancel_url: `${process.env.SERVER_URL}/failure.html`,
+    });
+    res.redirect(303, session.url);
 });
 
 app.post("/failure", (req, res) => {

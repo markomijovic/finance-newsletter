@@ -82,18 +82,17 @@
 
     <body class="text-center">
         <main class="form-signin">
+            <img
+                class="mb-4"
+                src="images/logo.png"
+                alt=""
+                width="72"
+                height="57"
+            />
+            <h1 class="h3 mb-3 fw-normal">
+                Subscribe to MM solutions financial analysis newsletter
+            </h1>
             <form action="/" method="POST">
-                <img
-                    class="mb-4"
-                    src="images/logo.png"
-                    alt=""
-                    width="72"
-                    height="57"
-                />
-                <h1 class="h3 mb-3 fw-normal">
-                    Subscribe to MM solutions financial analysis newsletter
-                </h1>
-
                 <div class="form-floating">
                     <input
                         type="text"
@@ -126,10 +125,21 @@
                 </div>
 
                 <button class="w-100 btn btn-lg btn-primary" type="submit">
-                    Subscribe / Checkout
+                    Subscribe to Free Tier
                 </button>
-                <p class="mt-5 mb-3 text-muted">&copy; THIS IS A MOCKUP IDEA ONLY. DO NOT USE THE PAYMENT SYSTEM. YOU WILL RECEIVE NOTHING IN RETURN.</p>
             </form>
+            <form action="/create-checkout-session" method="POST">
+                <button
+                    class="w-100 btn btn-lg btn-primary premium-btn"
+                    type="submit"
+                >
+                    Subscribe to Premium Tier at $5 / month
+                </button>
+            </form>
+            <p class="mt-5 mb-3 text-muted">
+                &copy; THIS IS A MOCKUP IDEA ONLY.
+            </p>
         </main>
     </body>
 </html>
+
